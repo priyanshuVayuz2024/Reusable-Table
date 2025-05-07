@@ -47,34 +47,42 @@ const facilityNameActions = [
 // ];
 export const header = [
   {
-    title: " title",
-    sortKey: "title",
-    action: facilityNameActions,
-    isSearchAble: true,
+    title: "title",
+    // sortKey: "title",
+    // action: facilityNameActions,
+    columnHideKey: 'title',
+    isSearchAble: false,
   },
   {
     title: "brand",
     sortKey: "brand",
-    action: facilityNameActions,
+    // action: facilityNameActions,
+    columnHideKey: 'brand',
     isSearchAble: false,
+    pin: true
   },
   {
     title: "category",
-    sortKey: "category",
-    action: facilityNameActions,
-    isSearchAble: true,
+    // sortKey: "category",
+    // action: facilityNameActions,
+    isSearchAble: false,
+
   },
   {
     title: "price",
-    sortKey: "price",
-    action: facilityNameActions,
+    // sortKey: "price",
+    // action: facilityNameActions,
+    columnHideKey: 'price',
     isSearchAble: false,
+    pin: true
   },
   {
     title: "rating",
-    sortKey: "rating",
-    action: facilityNameActions,
-    isSearchAble: true,
+    // sortKey: "rating",
+    // action: facilityNameActions,
+    columnHideKey: 'rating',
+    isSearchAble: false,
+    pin: true
   },
 ];
 

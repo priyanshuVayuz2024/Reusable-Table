@@ -39,12 +39,15 @@ function App() {
       setData(prod);
     }
     f();
-  }, [searchParams]);
+  }, [currpage, rowsPerPage]);
   // console.log(data, "data");
 
   const dummyTableData = data?.products?.map((prod) => ({
     title: {
       text: prod.title,
+      link: 'ok.ok/ok',
+      outerStyle: "bg-red-200",
+      innerStyle: "!text-blue-400 hover:!underline",
     },
     brand: {
       text: prod.brand,
@@ -59,7 +62,21 @@ function App() {
       text: prod.rating,
     },
   }));
-  console.log(dummyTableData, "dummytabledata");
+
+
+  const actionMenu = [
+    {
+      text: 'Edit',
+      onClick: () => alert('edit')
+    },
+    {
+      text: 'Delete',
+      onClick: () => alert('Delete')
+    }
+  ]
+
+
+
   return (
     <>
       <ReusableTable
@@ -67,6 +84,17 @@ function App() {
         tableData={dummyTableData}
         totalLength={data?.total}
         loading={loading}
+        enableGlobalSearch={true}
+        actionMenu={actionMenu}
+        columnHide={true}
+        filterDropdown={{
+          label: "Status Filter",
+          paramKey: "status",
+          options: [
+            { value: "active", label: "Active" },
+            { value: "inactive", label: "Inactive" },
+          ],
+        }}
       />
     </>
   );
