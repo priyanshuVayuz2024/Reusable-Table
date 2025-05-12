@@ -75,6 +75,50 @@ function App() {
     }
   ]
 
+  console.log(data, 'data');
+
+
+  const genericCardData = data?.products?.map(pr => ({
+    heading: pr?.title,
+    subheading: pr?.brand,
+    secondaryText: pr?.description,
+    image: pr?.images?.[0],
+    badge: pr?.availabilityStatus == "In Stock" ? { label: "In Stock", color: "error" } : { label: "Out Of Stock", color: "error" },
+    attachments: pr?.attachments || [],
+    fields: [
+      {
+        label: "Return Policy",
+        value: pr?.returnPolicy,
+        // valueClass: pr?.emailNotifications ? "text-green-600" : "text-red-600",
+      },
+      {
+        label: "Shipping",
+        value: pr?.shippingInformation,
+        valueClass: "text-red-600",
+      },
+      {
+        label: "Stock",
+        value: pr?.stock,
+      },
+      {
+        label: "Warranty",
+        value: pr?.warrantyInformation,
+      },
+      {
+        label: "Price",
+        value: pr?.price,
+      },
+      {
+        label: "Discount",
+        value: Math.ceil(Number(pr?.discountPercentage)),
+      },
+    ],
+  }));
+
+  console.log(genericCardData, 'nhi', data);
+
+
+
 
 
   return (
@@ -87,6 +131,7 @@ function App() {
         enableGlobalSearch={true}
         actionMenu={actionMenu}
         columnHide={true}
+        tileCardData={genericCardData}
         filterDropdown={{
           label: "Status Filter",
           paramKey: "status",

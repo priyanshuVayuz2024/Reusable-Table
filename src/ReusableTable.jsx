@@ -17,8 +17,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import PushPinIcon from '@mui/icons-material/PushPin';
+import { GenericCard } from "./GenericCard";
 
-const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalSearch = false, actionMenu, columnHide, filterDropdown }) => {
+const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalSearch = false, actionMenu, columnHide, filterDropdown, tileCardData }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") || 0;
   const pageSize = searchParams.get("pageSize") || 10;
@@ -240,6 +241,17 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
   };
 
 
+  const viewParam = searchParams.get("view") || "table";
+  useEffect(() => {
+    if (!searchParams.get("view")) {
+      const updatedParams = new URLSearchParams(searchParams);
+      updatedParams.set("view", "table");
+      setSearchParams(updatedParams);
+    }
+  }, []);
+
+
+
 
 
 
@@ -290,7 +302,7 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
             />
           </div>
         )}
-        {columnHide &&
+        {columnHide && viewParam == 'table' &&
           <>
             {headers?.map(hd => (
               hd?.columnHideKey && (
@@ -322,7 +334,37 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
             ))}
           </>
         }
-
+        {true && ( // replace `true` with your actual condition if needed
+          <div style={{ padding: "10px", display: "inline-block", marginRight: "10px" }}>
+            <span
+              onClick={() => {
+                const updatedParams = new URLSearchParams(searchParams);
+                updatedParams.set("view", "tile");
+                setSearchParams(updatedParams);
+              }}
+              style={{
+                marginRight: "10px",
+                cursor: "pointer",
+                fontWeight: viewParam === "tile" ? "bold" : "normal",
+              }}
+            >
+              Tile
+            </span>
+            <span
+              onClick={() => {
+                const updatedParams = new URLSearchParams(searchParams);
+                updatedParams.set("view", "table");
+                setSearchParams(updatedParams);
+              }}
+              style={{
+                cursor: "pointer",
+                fontWeight: viewParam === "table" ? "bold" : "normal",
+              }}
+            >
+              Table
+            </span>
+          </div>
+        )}
         {filterDropdown && (
           <div style={{ padding: "10px", display: "inline-block", marginRight: "10px" }}>
             <TextField
@@ -342,56 +384,61 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
             </TextField>
           </div>
         )}
-
-        <TableContainer >
-          <Table>
-            <TableHead className="bg-[#D9D9D9] !rounded-md !overflow-hidden" sx={{ borderRadius: 10 }}>
-              <TableRow sx={{ borderRadius: 12, overflow: "hidden" }} className="!rounded-xl !overflow-hidden">
-                {headerComp}
-                {actionMenu && <TableCell padding="none">Action</TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={headers.length + (actionMenu ? 1 : 0)} align="center">
-                    Loading...
-                  </TableCell>
+        {viewParam === "table" ? (
+          <TableContainer >
+            <Table>
+              <TableHead className="bg-[#D9D9D9] !rounded-md !overflow-hidden" sx={{ borderRadius: 10 }}>
+                <TableRow sx={{ borderRadius: 12, overflow: "hidden" }} className="!rounded-xl !overflow-hidden">
+                  {headerComp}
+                  {actionMenu && <TableCell padding="none">Action</TableCell>}
                 </TableRow>
-              ) : (
-                tableData?.map((data, index) => (
-                  <TableRow key={index}>
-                    {dataComp(data)}
-                    {actionMenu && (
-                      <TableCell>
-                        <MoreVertIcon
-                          style={{ cursor: "pointer" }}
-                          onClick={(e) => handleMenuOpen(e, index)}
-                        />
-                        <Menu
-                          anchorEl={menuAnchorEls[index]}
-                          open={Boolean(menuAnchorEls[index])}
-                          onClose={() => handleMenuClose(index)}
-                          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                          transformOrigin={{ vertical: "top", horizontal: "right" }}
-                          slotProps={{
-                            list: { autoFocusItem: false },
-                          }}
-                        >
-                          {actionMenu.map((ac, i) => (
-                            <MenuItem key={i} onClick={ac?.onClick}>
-                              {ac?.text}
-                            </MenuItem>
-                          ))}
-                        </Menu>
-                      </TableCell>
-                    )}
+              </TableHead>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={headers.length + (actionMenu ? 1 : 0)} align="center">
+                      Loading...
+                    </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                ) : (
+                  tableData?.map((data, index) => (
+                    <TableRow key={index}>
+                      {dataComp(data)}
+                      {actionMenu && (
+                        <TableCell>
+                          <MoreVertIcon
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => handleMenuOpen(e, index)}
+                          />
+                          <Menu
+                            anchorEl={menuAnchorEls[index]}
+                            open={Boolean(menuAnchorEls[index])}
+                            onClose={() => handleMenuClose(index)}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                            transformOrigin={{ vertical: "top", horizontal: "right" }}
+                            slotProps={{
+                              list: { autoFocusItem: false },
+                            }}
+                          >
+                            {actionMenu.map((ac, i) => (
+                              <MenuItem key={i} onClick={ac?.onClick}>
+                                {ac?.text}
+                              </MenuItem>
+                            ))}
+                          </Menu>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tileCardData?.map(data => <GenericCard data={data} />)}
+          </div>
+        )}
         <TablePagination
           component={"div"}
           count={totalLength}
@@ -400,6 +447,7 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage={viewParam === "tile" ? "Cards per page" : "Rows per page"}
         ></TablePagination>
       </div >
     </>
