@@ -78,6 +78,7 @@ function App() {
   console.log(data, 'data');
 
 
+  
   const genericCardData = data?.products?.map(pr => ({
     heading: pr?.title,
     subheading: pr?.brand,
