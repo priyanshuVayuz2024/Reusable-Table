@@ -118,13 +118,6 @@ function App() {
 
   console.log(genericCardData, "nhi", data);
 
-  const stats = [
-    { label: "Current Notices", count: 20, link: "/current-notices" },
-    { label: "Pending Approvals", count: 12, link: "/pending-approvals" },
-    { label: "Draft Notices", count: 20, link: "/draft-notices" },
-    { label: "Expiring Today", count: 20, link: "/expiring-today" },
-    { label: "Expired Notices", count: 4, link: "/expired-notices" },
-  ];
 
   return (
     <>
