@@ -4,11 +4,11 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import ReusableTable from "./ReusableTable";
 import { header } from "./utils";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 
-function App() {
+function App({ searchParams, setSearchParams, navigate }) {
   const [count, setCount] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState([]);
   const currpage = searchParams.get("page") || 0;
   const rowsPerPage = searchParams.get("pageSize") || 10;
@@ -45,7 +45,7 @@ function App() {
   const dummyTableData = data?.products?.map((prod) => ({
     title: {
       text: prod.title,
-      link: 'ok.ok/ok',
+      link: "ok.ok/ok",
       outerStyle: "bg-red-200",
       innerStyle: "!text-blue-400 hover:!underline",
     },
@@ -63,28 +63,25 @@ function App() {
     },
   }));
 
-
   const actionMenu = [
     {
-      text: 'Edit',
-      onClick: () => alert('edit')
+      text: "Edit",
+      onClick: () => alert("edit"),
     },
     {
-      text: 'Delete',
-      onClick: () => alert('Delete')
-    }
-  ]
-
-  console.log(data, 'data');
-
-
-  
-  const genericCardData = data?.products?.map(pr => ({
+      text: "Delete",
+      onClick: () => alert("Delete"),
+    },
+  ];
+  const genericCardData = data?.products?.map((pr) => ({
     heading: pr?.title,
     subheading: pr?.brand,
     secondaryText: pr?.description,
     image: pr?.images?.[0],
-    badge: pr?.availabilityStatus == "In Stock" ? { label: "In Stock", color: "error" } : { label: "Out Of Stock", color: "error" },
+    badge:
+      pr?.availabilityStatus == "In Stock"
+        ? { label: "In Stock", color: "error" }
+        : { label: "Out Of Stock", color: "error" },
     attachments: pr?.attachments || [],
     fields: [
       {
@@ -116,23 +113,20 @@ function App() {
     ],
   }));
 
-  console.log(genericCardData, 'nhi', data);
-
-
-
-
-
   return (
     <>
       <ReusableTable
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        navigate={navigate}
         headers={header}
         tableData={dummyTableData}
         totalLength={data?.total}
         loading={loading}
+        tileCardData={genericCardData}
         enableGlobalSearch={true}
         actionMenu={actionMenu}
         columnHide={true}
-        tileCardData={genericCardData}
         filterDropdown={{
           label: "Status Filter",
           paramKey: "status",

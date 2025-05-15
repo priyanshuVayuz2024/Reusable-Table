@@ -9,36 +9,45 @@ import {
   TextField,
   Menu,
   MenuItem,
-
 } from "@mui/material";
 import TablePagination from "@mui/material/TablePagination";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import PushPinIcon from '@mui/icons-material/PushPin';
+// import { Link, useSearchParams } from "react-router-dom";
+import PushPinIcon from "@mui/icons-material/PushPin";
 import { GenericCard } from "./GenericCard";
 
-const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalSearch = false, actionMenu, columnHide, filterDropdown, tileCardData }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const ReusableTable = ({
+  searchParams,
+  setSearchParams,
+  navigate,
+  headers,
+  tableData,
+  totalLength,
+  loading,
+  enableGlobalSearch = false,
+  actionMenu,
+  columnHide,
+  filterDropdown,
+  tileCardData,
+}) => {
+  // const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") || 0;
   const pageSize = searchParams.get("pageSize") || 10;
   const [currPage, setCurrPage] = useState(page);
   const [rowsPerPage, setRowsPerPage] = useState(pageSize);
 
-
   const [menuAnchorEls, setMenuAnchorEls] = useState({});
   const menuRefs = useRef({});
 
+  const [globalSearch, setGlobalSearch] = useState(
+    searchParams.get("globalSearch") || ""
+  );
 
-
-
-  const [globalSearch, setGlobalSearch] = useState(searchParams.get("globalSearch") || "");
-
-
-  const hiddenColumns = (searchParams.get("hiddenColumns") || "").split(",").filter(Boolean);
-
-
+  const hiddenColumns = (searchParams.get("hiddenColumns") || "")
+    .split(",")
+    .filter(Boolean);
 
   const handleChangePage = (_, newPage) => {
     setCurrPage(newPage);
@@ -78,7 +87,7 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     setSearchParams(params.toString());
   };
   const defaultSearch = {};
-  headers.forEach(h => {
+  headers.forEach((h) => {
     defaultSearch[h.sortKey] = searchParams.get(h.sortKey) || "";
   });
 
@@ -114,8 +123,6 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     }
   };
 
-
-
   const handleMenuOpen = (event, rowIndex) => {
     setMenuAnchorEls((prev) => ({ ...prev, [rowIndex]: event.currentTarget }));
   };
@@ -128,9 +135,7 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     });
   };
 
-
   const pinIndex = searchParams.get("pinIndex");
-
 
   const handlePinClick = (index) => {
     const updatedParams = new URLSearchParams(searchParams);
@@ -141,7 +146,6 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     }
     setSearchParams(updatedParams);
   };
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -158,63 +162,63 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     };
   }, []);
 
-
-
-
-  let headerComp = headers?.map((header, index) =>
-    !hiddenColumns.includes(header.columnHideKey) && (
-      <TableCell padding="none" key={index}>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center justify-center">
-            <span>{header?.title}</span>
-            {header?.sortKey && (
-              <button onClick={() => handleSort(header)}>
-                <ArrowDropDownIcon
-                  className={`${searchParams.get("sort_by") == header.sortKey &&
-                    searchParams.get("direction") === "ASC"
-                    ? "rotate-180"
-                    : ""
+  let headerComp = headers?.map(
+    (header, index) =>
+      !hiddenColumns.includes(header.columnHideKey) && (
+        <TableCell padding="none" key={index}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center">
+              <span>{header?.title}</span>
+              {header?.sortKey && (
+                <button onClick={() => handleSort(header)}>
+                  <ArrowDropDownIcon
+                    className={`${
+                      searchParams.get("sort_by") == header.sortKey &&
+                      searchParams.get("direction") === "ASC"
+                        ? "rotate-180"
+                        : ""
                     }`}
-                />
-              </button>
-            )}
-            {header?.pin && (
-              <>
-                <PushPinIcon
-                  onClick={() => handlePinClick(index)}
-                  style={{
-                    width: "15px",
-                    color: searchParams.get('pinIndex') == index ? "green" : "gray", // replace `someFlag` with your actual condition
-                  }}
-                  className="hover:cursor-pointer hover:!text-slate-700"
-                />
-              </>
-            )}
+                  />
+                </button>
+              )}
+              {header?.pin && (
+                <>
+                  <PushPinIcon
+                    onClick={() => handlePinClick(index)}
+                    style={{
+                      width: "15px",
+                      color:
+                        searchParams.get("pinIndex") == index
+                          ? "green"
+                          : "gray", // replace `someFlag` with your actual condition
+                    }}
+                    className="hover:cursor-pointer hover:!text-slate-700"
+                  />
+                </>
+              )}
+            </div>
           </div>
-        </div>
-        {header?.isSearchAble && (
-          <TextField
-            placeholder={`Search ${header?.title}`}
-            value={searchTerms[header?.sortKey] || ""}
-            onChange={(e) =>
-              setSearchTerms({
-                ...searchTerms,
-                [header?.sortKey]: e.target.value,
-              })
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearchChange(header?.sortKey)(e);
+          {header?.isSearchAble && (
+            <TextField
+              placeholder={`Search ${header?.title}`}
+              value={searchTerms[header?.sortKey] || ""}
+              onChange={(e) =>
+                setSearchTerms({
+                  ...searchTerms,
+                  [header?.sortKey]: e.target.value,
+                })
               }
-            }}
-            size="small"
-          />
-        )}
-      </TableCell>
-    ))
-
-
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchChange(header?.sortKey)(e);
+                }
+              }}
+              size="small"
+            />
+          )}
+        </TableCell>
+      )
+  );
 
   function moveToTop(arr, index) {
     if (index < 0 || index >= arr.length) return arr; // invalid index
@@ -240,7 +244,6 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     setSearchParams(updatedParams);
   };
 
-
   const viewParam = searchParams.get("view") || "table";
   useEffect(() => {
     if (!searchParams.get("view")) {
@@ -250,27 +253,26 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
     }
   }, []);
 
-
-
-
-
-
-
   if (pinIndex) {
-    headerComp = moveToTop(headerComp, parseInt(pinIndex))
+    headerComp = moveToTop(headerComp, parseInt(pinIndex));
   }
-
 
   let dataComp = (data) => {
     let temp = Object.entries(data).map(([key, cell], index) => {
       return (
-        !(headers[index]?.columnHideKey && hiddenColumns?.includes(headers[index]?.columnHideKey)) && (
+        !(
+          headers[index]?.columnHideKey &&
+          hiddenColumns?.includes(headers[index]?.columnHideKey)
+        ) && (
           <TableCell key={index} className={cell?.outerStyle}>
             {cell?.text ? (
               cell?.link ? (
-                <Link to={cell?.link} className={cell?.innerStyle}>
+                <button
+                  onClick={() => navigate(cell?.link)}
+                  className={cell?.innerStyle}
+                >
                   {cell?.text}
-                </Link>
+                </button>
               ) : (
                 cell?.text
               )
@@ -280,18 +282,24 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
           </TableCell>
         )
       );
-    })
+    });
     if (pinIndex) {
-      temp = moveToTop(temp, pinIndex)
+      temp = moveToTop(temp, pinIndex);
     }
-    return temp
-  }
+    return temp;
+  };
 
   return (
     <>
       <div className="px-5">
         {enableGlobalSearch && (
-          <div style={{ padding: "10px", marginLeft: "auto", width: "max-content" }}>
+          <div
+            style={{
+              padding: "10px",
+              marginLeft: "auto",
+              width: "max-content",
+            }}
+          >
             <TextField
               label="Search All"
               value={globalSearch}
@@ -302,40 +310,55 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
             />
           </div>
         )}
-        {columnHide && viewParam == 'table' &&
+        {columnHide && viewParam == "table" && (
           <>
-            {headers?.map(hd => (
-              hd?.columnHideKey && (
-                <span
-                  key={hd.columnHideKey}
-                  style={{
-                    cursor: "pointer",
-                    marginRight: 10,
-                    textDecoration: hiddenColumns.includes(hd.columnHideKey) ? "line-through" : "none",
-                  }}
-                  onClick={() => {
-                    const currentHidden = (searchParams.get("hiddenColumns") || "").split(",").filter(Boolean);
-                    const updated = currentHidden.includes(hd.columnHideKey)
-                      ? currentHidden.filter(col => col !== hd.columnHideKey)
-                      : [...currentHidden, hd.columnHideKey];
+            {headers?.map(
+              (hd) =>
+                hd?.columnHideKey && (
+                  <span
+                    key={hd.columnHideKey}
+                    style={{
+                      cursor: "pointer",
+                      marginRight: 10,
+                      textDecoration: hiddenColumns.includes(hd.columnHideKey)
+                        ? "line-through"
+                        : "none",
+                    }}
+                    onClick={() => {
+                      const currentHidden = (
+                        searchParams.get("hiddenColumns") || ""
+                      )
+                        .split(",")
+                        .filter(Boolean);
+                      const updated = currentHidden.includes(hd.columnHideKey)
+                        ? currentHidden.filter(
+                            (col) => col !== hd.columnHideKey
+                          )
+                        : [...currentHidden, hd.columnHideKey];
 
-                    const params = new URLSearchParams(searchParams);
-                    if (updated.length > 0) {
-                      params.set("hiddenColumns", updated.join(","));
-                    } else {
-                      params.delete("hiddenColumns");
-                    }
-                    setSearchParams(params);
-                  }}
-                >
-                  {hd?.title}
-                </span>
-              )
-            ))}
+                      const params = new URLSearchParams(searchParams);
+                      if (updated.length > 0) {
+                        params.set("hiddenColumns", updated.join(","));
+                      } else {
+                        params.delete("hiddenColumns");
+                      }
+                      setSearchParams(params);
+                    }}
+                  >
+                    {hd?.title}
+                  </span>
+                )
+            )}
           </>
-        }
+        )}
         {true && ( // replace `true` with your actual condition if needed
-          <div style={{ padding: "10px", display: "inline-block", marginRight: "10px" }}>
+          <div
+            style={{
+              padding: "10px",
+              display: "inline-block",
+              marginRight: "10px",
+            }}
+          >
             <span
               onClick={() => {
                 const updatedParams = new URLSearchParams(searchParams);
@@ -366,7 +389,13 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
           </div>
         )}
         {filterDropdown && (
-          <div style={{ padding: "10px", display: "inline-block", marginRight: "10px" }}>
+          <div
+            style={{
+              padding: "10px",
+              display: "inline-block",
+              marginRight: "10px",
+            }}
+          >
             <TextField
               select
               label={filterDropdown.label}
@@ -385,10 +414,16 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
           </div>
         )}
         {viewParam === "table" ? (
-          <TableContainer >
+          <TableContainer>
             <Table>
-              <TableHead className="bg-[#D9D9D9] !rounded-md !overflow-hidden" sx={{ borderRadius: 10 }}>
-                <TableRow sx={{ borderRadius: 12, overflow: "hidden" }} className="!rounded-xl !overflow-hidden">
+              <TableHead
+                className="bg-[#D9D9D9] !rounded-md !overflow-hidden"
+                sx={{ borderRadius: 10 }}
+              >
+                <TableRow
+                  sx={{ borderRadius: 12, overflow: "hidden" }}
+                  className="!rounded-xl !overflow-hidden"
+                >
                   {headerComp}
                   {actionMenu && <TableCell padding="none">Action</TableCell>}
                 </TableRow>
@@ -396,7 +431,10 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={headers.length + (actionMenu ? 1 : 0)} align="center">
+                    <TableCell
+                      colSpan={headers.length + (actionMenu ? 1 : 0)}
+                      align="center"
+                    >
                       Loading...
                     </TableCell>
                   </TableRow>
@@ -414,8 +452,14 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
                             anchorEl={menuAnchorEls[index]}
                             open={Boolean(menuAnchorEls[index])}
                             onClose={() => handleMenuClose(index)}
-                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                            transformOrigin={{ vertical: "top", horizontal: "right" }}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                            }}
                             slotProps={{
                               list: { autoFocusItem: false },
                             }}
@@ -435,9 +479,14 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
             </Table>
           </TableContainer>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tileCardData?.map(data => <GenericCard data={data} />)}
-          </div>
+          <>
+            {console.log("inside tile")}
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {tileCardData?.map((data) => (
+                <GenericCard data={data} />
+              ))}
+            </div>
+          </>
         )}
         <TablePagination
           component={"div"}
@@ -447,9 +496,11 @@ const ReusableTable = ({ headers, tableData, totalLength, loading, enableGlobalS
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}
-          labelRowsPerPage={viewParam === "tile" ? "Cards per page" : "Rows per page"}
+          labelRowsPerPage={
+            viewParam === "tile" ? "Cards per page" : "Rows per page"
+          }
         ></TablePagination>
-      </div >
+      </div>
     </>
   );
 };
