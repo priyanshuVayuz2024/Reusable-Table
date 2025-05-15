@@ -45,8 +45,8 @@ function App() {
   const dummyTableData = data?.products?.map((prod) => ({
     title: {
       text: prod.title,
-      link: 'ok.ok/ok',
-      outerStyle: "bg-red-200",
+      link: "ok.ok/ok",
+      // outerStyle: "bg-red-200",
       innerStyle: "!text-blue-400 hover:!underline",
     },
     brand: {
@@ -63,27 +63,28 @@ function App() {
     },
   }));
 
-
   const actionMenu = [
     {
-      text: 'Edit',
-      onClick: () => alert('edit')
+      text: "Edit",
+      onClick: () => alert("edit"),
     },
     {
-      text: 'Delete',
-      onClick: () => alert('Delete')
-    }
-  ]
+      text: "Delete",
+      onClick: () => alert("Delete"),
+    },
+  ];
 
-  console.log(data, 'data');
+  console.log(data, "data");
 
-
-  const genericCardData = data?.products?.map(pr => ({
+  const genericCardData = data?.products?.map((pr) => ({
     heading: pr?.title,
     subheading: pr?.brand,
     secondaryText: pr?.description,
     image: pr?.images?.[0],
-    badge: pr?.availabilityStatus == "In Stock" ? { label: "In Stock", color: "error" } : { label: "Out Of Stock", color: "error" },
+    badge:
+      pr?.availabilityStatus == "In Stock"
+        ? { label: "In Stock", color: "error" }
+        : { label: "Out Of Stock", color: "error" },
     attachments: pr?.attachments || [],
     fields: [
       {
@@ -115,11 +116,15 @@ function App() {
     ],
   }));
 
-  console.log(genericCardData, 'nhi', data);
+  console.log(genericCardData, "nhi", data);
 
-
-
-
+  const stats = [
+    { label: "Current Notices", count: 20, link: "/current-notices" },
+    { label: "Pending Approvals", count: 12, link: "/pending-approvals" },
+    { label: "Draft Notices", count: 20, link: "/draft-notices" },
+    { label: "Expiring Today", count: 20, link: "/expiring-today" },
+    { label: "Expired Notices", count: 4, link: "/expired-notices" },
+  ];
 
   return (
     <>
@@ -136,6 +141,7 @@ function App() {
           label: "Status Filter",
           paramKey: "status",
           options: [
+            { value: "", label: "All", count: 20 },
             { value: "active", label: "Active" },
             { value: "inactive", label: "Inactive" },
           ],
