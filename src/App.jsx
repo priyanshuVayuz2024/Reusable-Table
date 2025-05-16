@@ -4,11 +4,11 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import ReusableTable from "./ReusableTable";
 import { header } from "./utils";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 
-function App({navigate }) {
+function App({ searchParams, setSearchParams, navigate }) {
   const [count, setCount] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState([]);
   const currpage = searchParams.get("page") || 0;
   const rowsPerPage = searchParams.get("pageSize") || 10;
