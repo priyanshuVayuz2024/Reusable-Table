@@ -18,23 +18,18 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  TablePagination
 } from "@mui/material";
-import TablePagination from "@mui/material/TablePagination";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import SearchIcon from "@mui/icons-material/Search";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import TuneIcon from "@mui/icons-material/Tune";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+import { PushPin as PushPinIcon, MoreVert as MoreVertIcon, Tune as TuneIcon, ArrowDropDown as ArrowDropDownIcon, Search as SearchIcon, ViewModule as ViewModuleIcon, ViewList as ViewListIcon } from "@mui/icons-material"
+
+
+
 import { useEffect, useRef, useState } from "react";
-// import { Link, useSearchParams } from "react-router-dom";
-import PushPinIcon from "@mui/icons-material/PushPin";
 import { GenericCard } from "./GenericCard";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const ReusableTable = ({
-  searchParams,
-  setSearchParams,
-  navigate,
   headers,
   tableData,
   totalLength,
@@ -45,7 +40,8 @@ const ReusableTable = ({
   filterDropdown,
   tileCardData,
 }) => {
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate()
   const page = searchParams.get("page") || 0;
   const pageSize = searchParams.get("pageSize") || 10;
   const [currPage, setCurrPage] = useState(page);
@@ -100,7 +96,7 @@ const ReusableTable = ({
     setSearchParams(params.toString());
   };
   const defaultSearch = {};
-  headers.forEach((h) => {
+  headers?.forEach((h) => {
     defaultSearch[h.sortKey] = searchParams.get(h.sortKey) || "";
   });
 
@@ -185,12 +181,11 @@ const ReusableTable = ({
               {header?.sortKey && (
                 <button onClick={() => handleSort(header)}>
                   <ArrowDropDownIcon
-                    className={`${
-                      searchParams.get("sort_by") == header.sortKey &&
+                    className={`${searchParams.get("sort_by") == header.sortKey &&
                       searchParams.get("direction") === "ASC"
-                        ? "rotate-180"
-                        : ""
-                    }`}
+                      ? "rotate-180"
+                      : ""
+                      }`}
                   />
                 </button>
               )}
@@ -307,6 +302,7 @@ const ReusableTable = ({
 
   return (
     <>
+      tablee
       <>
         <div className="py-4 border-t flex gap-4 flex-wrap">
           {filterDropdown?.options?.map((item) => (
@@ -345,7 +341,7 @@ const ReusableTable = ({
                   updatedParams.set("view", "table");
                   setSearchParams(updatedParams);
                 }}
-                // variant={searchParams.get("view") == "table" && "contained"}
+              // variant={searchParams.get("view") == "table" && "contained"}
               >
                 <ViewListIcon />
                 <Typography>List</Typography>
@@ -366,7 +362,7 @@ const ReusableTable = ({
             className="h-fit"
             variant="outlined"
             startIcon={<TuneIcon />}
-            // onClick={handleClick}
+          // onClick={handleClick}
           >
             Filters
           </Button>
@@ -497,7 +493,7 @@ const ReusableTable = ({
         )}
         <TablePagination
           component={"div"}
-          count={totalLength}
+          count={totalLength || 0}
           page={currPage}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}

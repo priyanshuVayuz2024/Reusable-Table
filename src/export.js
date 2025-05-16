@@ -1,3 +1,3 @@
-import App from "./App";
+import ReusableTable from "./ReusableTable";
 
-window.reusableTable = App;
+window.reusableTable = ReusableTable;

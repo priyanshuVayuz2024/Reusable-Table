@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         external: isProdBuild
-          ? ["react", "react-dom", "tailwindcss", "@mui/material"]
+          ? ["react", "react-dom", "tailwindcss", "@mui/material", "react-router-dom", "@mui/icons-material"]
           : [],
         output: {
           globals: {
@@ -24,6 +24,8 @@ export default defineConfig(({ mode }) => {
             "react-dom": "ReactDOM",
             tailwindcss: "tailwindcss",
             "@mui/material": "MaterialUI",
+            "react-router-dom": "ReactRouterDOM",
+            "@mui/icons-material": "MuiIcons"
           },
         },
       },
@@ -35,7 +37,7 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       exclude: isProdBuild
-        ? ["react", "react-dom", "tailwindcss", "@mui/material"]
+        ? ["react", "react-dom", "tailwindcss", "@mui/material", "react-router-dom", "@mui/icons-material"]
         : [],
     },
   };
