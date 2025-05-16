@@ -27,11 +27,14 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import TuneIcon from "@mui/icons-material/Tune";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+// import { Link, useSearchParams } from "react-router-dom";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import { GenericCard } from "./GenericCard";
 
 const ReusableTable = ({
+  searchParams,
+  setSearchParams,
+  navigate,
   headers,
   tableData,
   totalLength,
@@ -42,7 +45,7 @@ const ReusableTable = ({
   filterDropdown,
   tileCardData,
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") || 0;
   const pageSize = searchParams.get("pageSize") || 10;
   const [currPage, setCurrPage] = useState(page);
@@ -277,10 +280,16 @@ const ReusableTable = ({
           <TableCell key={index} className={cell?.outerStyle}>
             {cell?.text ? (
               cell?.link ? (
-                <Link to={cell?.link} className={cell?.innerStyle}>
+                <button
+                  onClick={() => navigate(cell?.link)}
+                  className={cell?.innerStyle}
+                >
                   {cell?.text}
-                </Link>
+                </button>
               ) : (
+                // <Link to={cell?.link} className={cell?.innerStyle}>
+                //   {cell?.text}
+                // </Link>
                 cell?.text
               )
             ) : cell?.content ? (

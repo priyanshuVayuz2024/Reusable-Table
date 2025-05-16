@@ -6,7 +6,7 @@ import ReusableTable from "./ReusableTable";
 import { header } from "./utils";
 import { useSearchParams } from "react-router-dom";
 
-function App() {
+function App({navigate }) {
   const [count, setCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState([]);
@@ -118,10 +118,12 @@ function App() {
 
   console.log(genericCardData, "nhi", data);
 
-
   return (
     <>
       <ReusableTable
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        navigate={navigate}
         headers={header}
         tableData={dummyTableData}
         totalLength={data?.total}
