@@ -128,7 +128,7 @@ function App() {
         loading={loading}
         enableGlobalSearch={true}
         actionMenu={actionMenu}
-        columnHide={true}
+        columnHide={false}
         tileCardData={genericCardData}
         filterDropdown={{
           label: "Status Filter",

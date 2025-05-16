@@ -298,7 +298,7 @@ const ReusableTable = ({
 
   return (
     <>
-      <div>
+      <>
         <div className="py-4 border-t flex gap-4 flex-wrap">
           {filterDropdown?.options?.map((item) => (
             <div
@@ -361,7 +361,7 @@ const ReusableTable = ({
           >
             Filters
           </Button>
-          {/* {columnHide && viewParam === "table" && (
+          {columnHide && viewParam === "table" && (
             <FormControl sx={{ m: 1, width: 300 }}>
               <InputLabel id="column-visibility-label">Columns</InputLabel>
               <Select
@@ -412,9 +412,8 @@ const ReusableTable = ({
                   ))}
               </Select>
             </FormControl>
-          )} */}
+          )}
         </div>
-
         {viewParam === "table" ? (
           <TableContainer>
             <Table>
@@ -499,7 +498,7 @@ const ReusableTable = ({
             viewParam === "tile" ? "Cards per page" : "Rows per page"
           }
         ></TablePagination>
-      </div>
+      </>
     </>
   );
 };
