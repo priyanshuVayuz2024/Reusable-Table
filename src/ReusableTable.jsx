@@ -180,7 +180,11 @@ const ReusableTable = ({
   let headerComp = headers?.map(
     (header, index) =>
       !hiddenColumns.includes(header.columnHideKey) && (
-        <TableCell padding="none" key={index}>
+        <TableCell
+          padding="none"
+          className="!px-4 !py-2"
+          key={index}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center">
               <span>{header?.title}</span>
@@ -279,7 +283,7 @@ const ReusableTable = ({
           headers[index]?.columnHideKey &&
           hiddenColumns?.includes(headers[index]?.columnHideKey)
         ) && (
-          <TableCell key={index} className={cell?.outerStyle}>
+          <TableCell key={index} className={`${cell?.outerStyle} whitespace-nowrap`}>
             {cell?.text ? (
               cell?.link ? (
                 <button
@@ -308,210 +312,208 @@ const ReusableTable = ({
   };
 
   return (
-    <>
-      tablee
-      <>
-        <div className="py-4 border-t flex gap-4 flex-wrap">
-          {filterDropdown?.options?.map((item) => (
-            <div
-              key={item.label}
-              className="min-w-[200px] cursor-pointer flex flex-col gap-2 px-4 py-2 bg-white border border-[#E3E3E3] rounded-lg hover:shadow transition-all"
-              onClick={() => handleDropdownChange(item.value)}
-            >
-              <div>
-                <div className="text-sm text-gray-500">{item.label}</div>
-              </div>
-              {item.count && (
-                <div className="text-2xl font-bold">
-                  {item?.count?.toString().padStart(2, "0")}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="py-4 border-t-2 rounded-t-lg border-[#8201BB] flex items-center justify-end gap-4">
-          {enableGlobalSearch && (
-            <TextField
-              label="Search All"
-              value={globalSearch}
-              onChange={(e) => setGlobalSearch(e.target.value)}
-              onKeyDown={handleGlobalSearchKeyDown}
-              size="small"
-            />
-          )}
-
-          {true && (
-            <div>
-              <Button
-                onClick={() => {
-                  const updatedParams = new URLSearchParams(searchParams);
-                  updatedParams.set("view", "table");
-                  setSearchParams(updatedParams);
-                }}
-                // variant={searchParams.get("view") == "table" && "contained"}
-              >
-                <ViewListIcon />
-                <Typography>List</Typography>
-              </Button>
-              <Button
-                onClick={() => {
-                  const updatedParams = new URLSearchParams(searchParams);
-                  updatedParams.set("view", "tile");
-                  setSearchParams(updatedParams);
-                }}
-              >
-                <ViewModuleIcon />
-                <Typography>Grid</Typography>
-              </Button>
-            </div>
-          )}
-          <Button
-            className="h-fit"
-            variant="outlined"
-            startIcon={<TuneIcon />}
-            // onClick={handleClick}
+    <div className="bg-[#FAFAFA]">
+      <div className="py-4 border-t flex gap-4 flex-wrap">
+        {filterDropdown?.options?.map((item) => (
+          <div
+            key={item.label}
+            className="min-w-[200px] cursor-pointer flex flex-col gap-2 px-4 py-2 bg-white border border-[#E3E3E3] rounded-lg hover:shadow transition-all"
+            onClick={() => handleDropdownChange(item.value)}
           >
-            Filters
-          </Button>
-          {columnHide && viewParam === "table" && (
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="column-visibility-label">Columns</InputLabel>
-              <Select
-                labelId="column-visibility-label"
-                multiple
-                value={headers
-                  .filter(
-                    (hd) =>
-                      hd.columnHideKey &&
-                      !hiddenColumns.includes(hd.columnHideKey)
-                  )
-                  .map((hd) => hd.columnHideKey)}
-                onChange={(event) => {
-                  const selected = event.target.value;
-                  const allKeys = headers
-                    .filter((hd) => hd.columnHideKey)
-                    .map((hd) => hd.columnHideKey);
+            <div>
+              <div className="text-sm text-gray-500">{item.label}</div>
+            </div>
+            {item.count && (
+              <div className="text-2xl font-bold">
+                {item?.count?.toString().padStart(2, "0")}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="py-4 border-t-2 rounded-t-lg border-[#8201BB] flex flex-wrap items-center justify-end gap-4">
+        {enableGlobalSearch && (
+          <TextField
+            label="Search All"
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
+            onKeyDown={handleGlobalSearchKeyDown}
+            size="small"
+          />
+        )}
 
-                  const newHidden = allKeys.filter(
-                    (key) => !selected.includes(key)
-                  );
-
-                  const params = new URLSearchParams(searchParams);
-                  if (newHidden.length > 0) {
-                    params.set("hiddenColumns", newHidden.join(","));
-                  } else {
-                    params.delete("hiddenColumns");
-                  }
-                  setSearchParams(params);
-                }}
-                input={<OutlinedInput label="Columns" />}
-                renderValue={(selected) =>
-                  headers
-                    .filter((hd) => selected.includes(hd.columnHideKey))
-                    .map((hd) => hd.title)
-                    .join(", ")
-                }
-              >
-                {headers
-                  .filter((hd) => hd.columnHideKey)
-                  .map((hd) => (
-                    <MenuItem key={hd.columnHideKey} value={hd.columnHideKey}>
-                      <Checkbox
-                        checked={!hiddenColumns.includes(hd.columnHideKey)}
-                      />
-                      <ListItemText primary={hd.title} />
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          )}
-        </div>
-        {viewParam === "table" ? (
-          <TableContainer>
-            <Table>
-              <TableHead
-                className="bg-[#D9D9D9] !rounded-md !overflow-hidden"
-                sx={{ borderRadius: 10 }}
-              >
-                <TableRow
-                  sx={{ borderRadius: 12, overflow: "hidden" }}
-                  className="!rounded-xl !overflow-hidden"
-                >
-                  {headerComp}
-                  {actionMenu && <TableCell padding="none">Action</TableCell>}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={headers.length + (actionMenu ? 1 : 0)}
-                      align="center"
-                    >
-                      Loading...
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  tableData?.map((data, index) => (
-                    <TableRow key={index}>
-                      {dataComp(data)}
-                      {actionMenu && (
-                        <TableCell>
-                          <MoreVertIcon
-                            style={{ cursor: "pointer" }}
-                            onClick={(e) => handleMenuOpen(e, index)}
-                          />
-                          <Menu
-                            anchorEl={menuAnchorEls[index]}
-                            open={Boolean(menuAnchorEls[index])}
-                            onClose={() => handleMenuClose(index)}
-                            anchorOrigin={{
-                              vertical: "bottom",
-                              horizontal: "right",
-                            }}
-                            transformOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                            slotProps={{
-                              list: { autoFocusItem: false },
-                            }}
-                          >
-                            {actionMenu.map((ac, i) => (
-                              <MenuItem key={i} onClick={ac?.onClick}>
-                                {ac?.text}
-                              </MenuItem>
-                            ))}
-                          </Menu>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tileCardData?.map((data) => (
-              <GenericCard data={data} />
-            ))}
+        {true && (
+          <div>
+            <Button
+              onClick={() => {
+                const updatedParams = new URLSearchParams(searchParams);
+                updatedParams.set("view", "table");
+                setSearchParams(updatedParams);
+              }}
+              // variant={searchParams.get("view") == "table" && "contained"}
+            >
+              <ViewListIcon />
+              <Typography>List</Typography>
+            </Button>
+            <Button
+              onClick={() => {
+                const updatedParams = new URLSearchParams(searchParams);
+                updatedParams.set("view", "tile");
+                setSearchParams(updatedParams);
+              }}
+            >
+              <ViewModuleIcon />
+              <Typography>Grid</Typography>
+            </Button>
           </div>
         )}
-        <TablePagination
-          component={"div"}
-          count={totalLength || 0}
-          page={currPage}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-          labelRowsPerPage={
-            viewParam === "tile" ? "Cards per page" : "Rows per page"
-          }
-        ></TablePagination>
-      </>
-    </>
+        <Button
+          className="h-fit"
+          variant="outlined"
+          startIcon={<TuneIcon />}
+          // onClick={handleClick}
+        >
+          Filters
+        </Button>
+        {columnHide && viewParam === "table" && (
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="column-visibility-label">Columns</InputLabel>
+            <Select
+              labelId="column-visibility-label"
+              multiple
+              value={headers
+                .filter(
+                  (hd) =>
+                    hd.columnHideKey &&
+                    !hiddenColumns.includes(hd.columnHideKey)
+                )
+                .map((hd) => hd.columnHideKey)}
+              onChange={(event) => {
+                const selected = event.target.value;
+                const allKeys = headers
+                  .filter((hd) => hd.columnHideKey)
+                  .map((hd) => hd.columnHideKey);
+
+                const newHidden = allKeys.filter(
+                  (key) => !selected.includes(key)
+                );
+
+                const params = new URLSearchParams(searchParams);
+                if (newHidden.length > 0) {
+                  params.set("hiddenColumns", newHidden.join(","));
+                } else {
+                  params.delete("hiddenColumns");
+                }
+                setSearchParams(params);
+              }}
+              input={<OutlinedInput label="Columns" />}
+              renderValue={(selected) =>
+                headers
+                  .filter((hd) => selected.includes(hd.columnHideKey))
+                  .map((hd) => hd.title)
+                  .join(", ")
+              }
+            >
+              {headers
+                .filter((hd) => hd.columnHideKey)
+                .map((hd) => (
+                  <MenuItem key={hd.columnHideKey} value={hd.columnHideKey}>
+                    <Checkbox
+                      checked={!hiddenColumns.includes(hd.columnHideKey)}
+                    />
+                    <ListItemText primary={hd.title} />
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+        )}
+      </div>
+      {viewParam === "table" ? (
+        <TableContainer>
+          <Table className="">
+            <TableHead
+              className="bg-[#D9D9D9] !text-[#121212]"
+              sx={{ borderRadius: 10 }}
+            >
+              <TableRow>
+                {headerComp}
+                {actionMenu && (
+                  <TableCell className="!px-4 !py-2 " padding="none">
+                    Action
+                  </TableCell>
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody className="bg-white">
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={headers.length + (actionMenu ? 1 : 0)}
+                    align="center"
+                  >
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              ) : (
+                tableData?.map((data, index) => (
+                  <TableRow key={index}>
+                    {dataComp(data)}
+                    {actionMenu && (
+                      <TableCell>
+                        <MoreVertIcon
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => handleMenuOpen(e, index)}
+                        />
+                        <Menu
+                          anchorEl={menuAnchorEls[index]}
+                          open={Boolean(menuAnchorEls[index])}
+                          onClose={() => handleMenuClose(index)}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          slotProps={{
+                            list: { autoFocusItem: false },
+                          }}
+                        >
+                          {actionMenu.map((ac, i) => (
+                            <MenuItem key={i} onClick={ac?.onClick}>
+                              {ac?.text}
+                            </MenuItem>
+                          ))}
+                        </Menu>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {tileCardData?.map((data) => (
+            <GenericCard data={data} />
+          ))}
+        </div>
+      )}
+      <TablePagination
+        component={"div"}
+        count={totalLength || 0}
+        page={currPage}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        labelRowsPerPage={
+          viewParam === "tile" ? "Cards per page" : "Rows per page"
+        }
+      ></TablePagination>
+    </div>
   );
 };
 
