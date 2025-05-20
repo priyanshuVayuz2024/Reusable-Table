@@ -18,12 +18,18 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
-  TablePagination
+  TablePagination,
 } from "@mui/material";
 
-import { PushPin as PushPinIcon, MoreVert as MoreVertIcon, Tune as TuneIcon, ArrowDropDown as ArrowDropDownIcon, Search as SearchIcon, ViewModule as ViewModuleIcon, ViewList as ViewListIcon } from "@mui/icons-material"
-
-
+import {
+  PushPin as PushPinIcon,
+  MoreVert as MoreVertIcon,
+  Tune as TuneIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+  Search as SearchIcon,
+  ViewModule as ViewModuleIcon,
+  ViewList as ViewListIcon,
+} from "@mui/icons-material";
 
 import { useEffect, useRef, useState } from "react";
 import { GenericCard } from "./GenericCard";
@@ -41,7 +47,7 @@ const ReusableTable = ({
   tileCardData,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const page = searchParams.get("page") || 0;
   const pageSize = searchParams.get("pageSize") || 10;
   const [currPage, setCurrPage] = useState(page);
@@ -181,11 +187,12 @@ const ReusableTable = ({
               {header?.sortKey && (
                 <button onClick={() => handleSort(header)}>
                   <ArrowDropDownIcon
-                    className={`${searchParams.get("sort_by") == header.sortKey &&
+                    className={`${
+                      searchParams.get("sort_by") == header.sortKey &&
                       searchParams.get("direction") === "ASC"
-                      ? "rotate-180"
-                      : ""
-                      }`}
+                        ? "rotate-180"
+                        : ""
+                    }`}
                   />
                 </button>
               )}
@@ -341,7 +348,7 @@ const ReusableTable = ({
                   updatedParams.set("view", "table");
                   setSearchParams(updatedParams);
                 }}
-              // variant={searchParams.get("view") == "table" && "contained"}
+                // variant={searchParams.get("view") == "table" && "contained"}
               >
                 <ViewListIcon />
                 <Typography>List</Typography>
@@ -362,7 +369,7 @@ const ReusableTable = ({
             className="h-fit"
             variant="outlined"
             startIcon={<TuneIcon />}
-          // onClick={handleClick}
+            // onClick={handleClick}
           >
             Filters
           </Button>
