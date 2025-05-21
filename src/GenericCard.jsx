@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { InsertDriveFile } from "@mui/icons-material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router";
 import { Popover } from "@mui/material";
 import { useState } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -25,7 +24,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
 // import NoticeBoardDetail from "../detail";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 export const GenericCard = ({ data }) => {
   console.log(data, "generic card data");
@@ -73,6 +72,7 @@ export const GenericCard = ({ data }) => {
           />
 
           <Typography variant="body2" className="text-gray-700 mb-2">
+            {data?.description}
             {data?.description}
           </Typography>
 

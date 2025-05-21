@@ -66,9 +66,15 @@ const ReusableTable = ({
     searchParams.get("globalSearch") || ""
   );
 
+<<<<<<< HEAD
   useEffect(() => {
     setCurrPage(page);
   }, [page]);
+=======
+  console.log(tileCardData, 'hmmm');
+
+
+>>>>>>> 07228f62fb9371c7fc81496729dd009424e080b8
 
   const hiddenColumns = (searchParams.get("hiddenColumns") || "")
     .split(",")
@@ -197,12 +203,11 @@ const ReusableTable = ({
               {header?.sortKey && (
                 <button onClick={() => handleSort(header)}>
                   <ArrowDropDownIcon
-                    className={`${
-                      searchParams.get("sort_by") == header.sortKey &&
+                    className={`${searchParams.get("sort_by") == header.sortKey &&
                       searchParams.get("direction") === "ASC"
-                        ? "rotate-180"
-                        : ""
-                    }`}
+                      ? "rotate-180"
+                      : ""
+                      }`}
                   />
                 </button>
               )}
@@ -360,7 +365,7 @@ const ReusableTable = ({
                 updatedParams.set("view", "table");
                 setSearchParams(updatedParams);
               }}
-              // variant={searchParams.get("view") == "table" && "contained"}
+            // variant={searchParams.get("view") == "table" && "contained"}
             >
               <ViewListIcon />
               <Typography>List</Typography>
@@ -381,7 +386,7 @@ const ReusableTable = ({
           className="h-fit"
           variant="outlined"
           startIcon={<TuneIcon />}
-          // onClick={handleClick}
+        // onClick={handleClick}
         >
           Filters
         </Button>
