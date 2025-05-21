@@ -66,15 +66,9 @@ const ReusableTable = ({
     searchParams.get("globalSearch") || ""
   );
 
-<<<<<<< HEAD
   useEffect(() => {
     setCurrPage(page);
   }, [page]);
-=======
-  console.log(tileCardData, 'hmmm');
-
-
->>>>>>> 07228f62fb9371c7fc81496729dd009424e080b8
 
   const hiddenColumns = (searchParams.get("hiddenColumns") || "")
     .split(",")
