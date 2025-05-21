@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { InsertDriveFile } from "@mui/icons-material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router";
 import { Popover } from "@mui/material";
 import { useState } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -25,7 +24,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
 // import NoticeBoardDetail from "../detail";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 export const GenericCard = ({ data }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,11 +43,11 @@ export const GenericCard = ({ data }) => {
       >
         <CardContent>
           <div className="flex justify-between items-start mb-2">
-            <Link to={`detail`}>
+            {/* <Link to={`detail`}>
               <Typography variant="h6" className="font-bold">
                 {data.title}
               </Typography>
-            </Link>
+            </Link> */}
             <div className="hover:cursor-pointer" onClick={handleClick}>
               <MoreVertIcon />
             </div>
@@ -70,11 +69,11 @@ export const GenericCard = ({ data }) => {
           />
 
           <Typography variant="body2" className="text-gray-700 mb-2">
-            {data.description}
+            {data?.description}
           </Typography>
 
           <div className="flex gap-2 my-3">
-            {data.attachments.map((file, idx) => (
+            {data?.attachments.map((file, idx) => (
               <Tooltip key={idx} title={file}>
                 <Avatar variant="rounded" className="bg-gray-200 text-gray-700">
                   <InsertDriveFile />
