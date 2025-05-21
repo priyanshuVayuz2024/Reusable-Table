@@ -34,6 +34,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { GenericCard } from "./GenericCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { header } from "./utils";
 
 const ReusableTable = ({
   headers,
@@ -48,17 +49,26 @@ const ReusableTable = ({
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const page = searchParams.get("page") || 0;
+  const page = parseInt(searchParams.get("page")) || 0;
   const pageSize = searchParams.get("pageSize") || 10;
   const [currPage, setCurrPage] = useState(page);
   const [rowsPerPage, setRowsPerPage] = useState(pageSize);
-
+  console.log(headers, "header from table");
+  console.log(tableData, "tabledata from table");
+  console.log(loading, "loading from table ");
+  console.log(tileCardData, "tilecarddatafromtable");
   const [menuAnchorEls, setMenuAnchorEls] = useState({});
   const menuRefs = useRef({});
+
+  console.log(page, currPage, "pagecurrpage");
 
   const [globalSearch, setGlobalSearch] = useState(
     searchParams.get("globalSearch") || ""
   );
+
+  useEffect(() => {
+    setCurrPage(page);
+  }, [page]);
 
   const hiddenColumns = (searchParams.get("hiddenColumns") || "")
     .split(",")
@@ -180,11 +190,7 @@ const ReusableTable = ({
   let headerComp = headers?.map(
     (header, index) =>
       !hiddenColumns.includes(header.columnHideKey) && (
-        <TableCell
-          padding="none"
-          className="!px-4 !py-2"
-          key={index}
-        >
+        <TableCell padding="none" className="!px-4 !py-2" key={index}>
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center">
               <span>{header?.title}</span>
@@ -277,13 +283,17 @@ const ReusableTable = ({
   }
 
   let dataComp = (data) => {
+    console.log(data, "data from lin 276");
     let temp = Object.entries(data).map(([key, cell], index) => {
       return (
         !(
           headers[index]?.columnHideKey &&
           hiddenColumns?.includes(headers[index]?.columnHideKey)
         ) && (
-          <TableCell key={index} className={`${cell?.outerStyle} whitespace-nowrap`}>
+          <TableCell
+            key={index}
+            className={`${cell?.outerStyle} whitespace-nowrap`}
+          >
             {cell?.text ? (
               cell?.link ? (
                 <button
@@ -496,9 +506,15 @@ const ReusableTable = ({
         </TableContainer>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tileCardData?.map((data) => (
-            <GenericCard data={data} />
-          ))}
+          {loading ? (
+            "Loading"
+          ) : (
+            <>
+              {tileCardData?.map((data) => (
+                <GenericCard data={data} />
+              ))}
+            </>
+          )}
         </div>
       )}
       <TablePagination

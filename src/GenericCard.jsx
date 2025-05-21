@@ -28,6 +28,7 @@ import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlin
 import { useNavigate } from "react-router";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 export const GenericCard = ({ data }) => {
+  console.log(data, "generic card data");
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClose = () => {
     setAnchorEl(null);
@@ -44,11 +45,13 @@ export const GenericCard = ({ data }) => {
       >
         <CardContent>
           <div className="flex justify-between items-start mb-2">
-            <Link to={`detail`}>
+            {/* <Link to={`detail`}> */}
+            <button onClick={() => navigate("detail")}>
               <Typography variant="h6" className="font-bold">
-                {data.title}
+                {data?.title}
               </Typography>
-            </Link>
+            </button>
+            {/* </Link> */}
             <div className="hover:cursor-pointer" onClick={handleClick}>
               <MoreVertIcon />
             </div>
@@ -56,7 +59,7 @@ export const GenericCard = ({ data }) => {
 
           <div className="flex justify-between items-center mb-2">
             <Typography variant="body2" color="textSecondary" gutterBottom>
-              {data.date}
+              {data?.date}
             </Typography>
             <Chip label="Expiring Soon" size="small" color="error" />
           </div>
@@ -64,17 +67,17 @@ export const GenericCard = ({ data }) => {
           <CardMedia
             component="img"
             height="160"
-            image={data.image ? data.image : "/anacity.svg"}
-            alt={data.title}
+            image={data?.image ? data?.image : "/anacity.svg"}
+            alt={data?.title}
             className="min-h-[172px] rounded-lg my-2 p-6 bg-gray-50 !object-contain"
           />
 
           <Typography variant="body2" className="text-gray-700 mb-2">
-            {data.description}
+            {data?.description}
           </Typography>
 
           <div className="flex gap-2 my-3">
-            {data.attachments.map((file, idx) => (
+            {data?.attachments?.map((file, idx) => (
               <Tooltip key={idx} title={file}>
                 <Avatar variant="rounded" className="bg-gray-200 text-gray-700">
                   <InsertDriveFile />
@@ -86,13 +89,13 @@ export const GenericCard = ({ data }) => {
           <div className="space-y-4 mt-3">
             <LabelValue
               label={"Email Notifications:"}
-              value={data.emailNotifications ? "Yes" : "No"}
+              value={data?.emailNotifications ? "Yes" : "No"}
             />
-            <LabelValue label={"Expiry Date:"} value={data.expiryDate} />
-            <LabelValue label={"Visibility:"} value={data.visibility} />
-            <LabelValue label={"Approved By:"} value={data.approvedBy} />
-            <LabelValue label={"Posted By:"} value={data.postedBy} />
-            <LabelValue label={"Approved On:"} value={data.approvedOn} />
+            <LabelValue label={"Expiry Date:"} value={data?.expiryDate} />
+            <LabelValue label={"Visibility:"} value={data?.visibility} />
+            <LabelValue label={"Approved By:"} value={data?.approvedBy} />
+            <LabelValue label={"Posted By:"} value={data?.postedBy} />
+            <LabelValue label={"Approved On:"} value={data?.approvedOn} />
           </div>
         </CardContent>
       </Card>
